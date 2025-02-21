@@ -1,0 +1,21 @@
+Response,Frequency of Use,Data Files,Current Dashboard Creation,Biggest Challenge,Platform Benefit,Important Features,File Type Support,Industry,Data Analytics Expertise,Beta Test Participation
+1,Weekly,CSV,"Using manual processes (Excel spreadsheets)","Data cleaning and preparation",Extremely beneficial,"Interactive and dynamic charts; Automated data cleaning and transformation",Very critical,Education,Beginner,Yes
+2,Monthly,XLSX (Excel),Pre-built templates,"Time consumption",Somewhat beneficial,"Customizable dashboard layouts; Advanced filtering and drill-down capabilities",Important,Education,Beginner,Maybe
+3,Rarely,"A mix of all of the above","Using manual processes (Excel spreadsheets)","Complexity of tools",Extremely beneficial,"Real-time data updates; Easy integration with other tools and data sources",Very critical,Education,Beginner,Yes
+4,Weekly,CSV,"Business intelligence tools (Power BI, Tableau)","Limited customization options",Extremely beneficial,"Interactive charts; Customizable dashboard layouts; Advanced filtering",Very critical,Education,Intermediate,Yes
+5,Monthly,XLSX (Excel),Pre-built templates,"Integration issues with various file types",Somewhat beneficial,"Automated data cleaning; Customizable layouts",Important,Education,Beginner,Maybe
+6,Daily,CSV,"Custom coding or scripts","Time consumption",Extremely beneficial,"Real-time data updates; Advanced filtering; Customizable layouts",Very critical,Education,Advanced,Yes
+7,Rarely,"Database files (e.g., SQL)","Using manual processes (Excel)","Data cleaning and preparation",Somewhat beneficial,"Automated data cleaning; Interactive charts",Somewhat important,Education,Beginner,No
+8,Weekly,"A mix of all of the above","Business intelligence tools (Tableau)","Complexity of tools",Extremely beneficial,"Interactive and dynamic charts; Real-time updates; Easy integration",Very critical,Education,Intermediate,Yes
+9,Monthly,XLSX (Excel),Pre-built templates,"Limited customization options",Somewhat beneficial,"Customizable dashboard layouts; Advanced filtering",Important,Education,Beginner,Maybe
+10,Weekly,CSV,"Custom coding or scripts","Time consumption",Extremely beneficial,"Automated data cleaning; Interactive charts",Very critical,Education,Advanced,Yes
+11,Daily,CSV,"Business intelligence tools (Power BI)","Data cleaning and preparation",Extremely beneficial,"Real-time data updates; Customizable layouts",Very critical,Education,Intermediate,Yes
+12,Rarely,XLSX (Excel),"Manual processes (Excel spreadsheets)","Complexity of tools",Somewhat beneficial,"Easy integration with other tools; Automated data cleaning",Somewhat important,Education,Beginner,No
+13,Weekly,"A mix of all of the above",Pre-built templates,"Integration issues with various file types",Extremely beneficial,"Interactive and dynamic charts; Advanced filtering",Very critical,Education,Intermediate,Yes
+14,Monthly,"Database files (SQL)","Custom coding or scripts","Time consumption",Extremely beneficial,"Real-time updates; Customizable dashboard layouts",Important,Education,Advanced,Yes
+15,Weekly,XLSX (Excel),"Using manual processes (Excel spreadsheets)","Data cleaning and preparation",Extremely beneficial,"Automated data cleaning; Interactive charts; Customizable layouts",Very critical,Education,Beginner,Yes
+16,Rarely,CSV,Pre-built templates,"Limited customization options",Somewhat beneficial,"Advanced filtering and drill-down; Easy integration",Somewhat important,Education,Beginner,Maybe
+17,Weekly,"A mix of all of the above","Business intelligence tools (Tableau)","Complexity of tools",Extremely beneficial,"Interactive and dynamic charts; Real-time updates; Customizable layouts",Very critical,Education,Intermediate,Yes
+18,Daily,CSV,"Custom coding or scripts","Time consumption",Extremely beneficial,"Automated data cleaning; Advanced filtering",Very critical,Education,Advanced,Yes
+19,Monthly,XLSX (Excel),"Using manual processes (Excel spreadsheets)","Data cleaning and preparation",Somewhat beneficial,"Customizable dashboard layouts; Interactive charts",Important,Education,Beginner,Maybe
+20,Weekly,"Database files (SQL)","Business intelligence tools (Power BI)","Integration issues with various file types",Extremely beneficial,"Real-time updates; Easy integration; Customizable dashboard layouts",Very critical,Education,Intermediate,Yes
