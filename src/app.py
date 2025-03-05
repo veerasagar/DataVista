@@ -5,7 +5,7 @@ from visualization import plot_scatter, plot_bar, plot_line, generate_pdf_report
 import pandas as pd
 
 def main():
-    st.set_page_config(page_title="Healthcare Dashboard", layout="wide")
+    st.set_page_config(page_title="Datavista", layout="wide")
     init_db()  # Ensure the database is initialized
 
     # Initialize session state for authentication
@@ -16,7 +16,7 @@ def main():
 
     # --- Login / Sign Up Section ---
     if not st.session_state.logged_in:
-        st.title("Welcome to the Healthcare Dashboard")
+        st.title("Welcome to the Datavista!!!")
         st.markdown("Please login or sign up to continue")
         auth_choice = st.radio("Select Option", ["Login", "Sign Up"], index=0, key="auth_choice")
 
@@ -57,14 +57,14 @@ def main():
         return  # Stop here if not logged in
 
     # --- Main Dashboard Section (after login) ---
-    st.sidebar.title("Navigation")
+    st.sidebar.title("Datavista!")
     page = st.sidebar.radio("Go to", ["Dashboard", "Profile", "Download Report"])
     if st.sidebar.button("Logout"):
         st.session_state.logged_in = False
         st.session_state.username = ""
         st.rerun()
 
-    st.title("Healthcare Dashboard")
+    st.title("DataVista: A Simplified Data Visualization Approach")
     st.markdown(f"**Welcome, {st.session_state.username}!**")
     st.markdown(f"*Today is {pd.to_datetime('today').strftime('%a, %b %d, %Y')}*")
 
