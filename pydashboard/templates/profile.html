@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profile - Healthcare Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #5477f5;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5em;
+    }
+    .nav-links a {
+      color: white;
+      margin-left: 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 960px;
+      margin: 80px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .profile-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .profile-header h2 {
+      margin: 0;
+      font-size: 2em;
+    }
+    .profile-header p {
+      font-size: 1.1em;
+      color: #555;
+    }
+    .profile-info {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin-bottom: 30px;
+    }
+    .info-card {
+      background: #f9f9f9;
+      padding: 20px;
+      margin: 10px;
+      border-radius: 8px;
+      flex: 1 1 300px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .info-card h3 {
+      margin-top: 0;
+      color: #5477f5;
+    }
+    .info-card p {
+      font-size: 1em;
+      color: #333;
+      margin: 5px 0;
+    }
+    .edit-profile {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .edit-profile button {
+      background: #5477f5;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    .edit-profile button:hover {
+      background: #3c5ec7;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Profile</h1>
+    <div class="nav-links">
+      <a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('auth.logout') }}">Logout</a>
+    </div>
+  </header>
+  <div class="container">
+    <div class="profile-header">
+      <h2>Hello, {{ username }}!</h2>
+      <p>Welcome to your profile page.</p>
+    </div>
+    <div class="profile-info">
+      <div class="info-card">
+        <h3>Account Details</h3>
+        <p><strong>Username:</strong> {{ username }}</p>
+        <p><strong>Email:</strong> {{ email if email is defined else 'user@example.com' }}</p>
+        <p><strong>Member Since:</strong> {{ joined_date if joined_date is defined else 'N/A' }}</p>
+      </div>
+      <div class="info-card">
+        <h3>Activity Summary</h3>
+        <p>You have logged in <strong>{{ login_count if login_count is defined else '0' }}</strong> times.</p>
+        <p>Last login: <strong>{{ last_login if last_login is defined else 'N/A' }}</strong></p>
+      </div>
+      <div class="info-card">
+        <h3>Reports</h3>
+        <p>You have generated <strong>{{ report_count if report_count is defined else '0' }}</strong> reports.</p>
+        <p>Check your <a href="{{ url_for('dashboard.download_report') }}">latest report</a>.</p>
+      </div>
+    </div>
+    <div class="edit-profile">
+      <button onclick="alert('Profile edit functionality coming soon!')">Edit Profile</button>
+    </div>
+  </div>
+</body>
+</html>

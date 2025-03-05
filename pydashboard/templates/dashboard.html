@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      header {
+        background: #5477f5;
+        color: white;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+      }
+      .nav-container {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+      }
+      .logo h1 {
+        margin: 0;
+        font-size: 1.5em;
+      }
+      nav {
+        flex: 1;
+        margin-left: 40px;
+      }
+      .nav-links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+      }
+      .nav-links li {
+        margin: 0 15px;
+        position: relative;
+      }
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 8px;
+      }
+      /* Dropdown Styles */
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        min-width: 150px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        z-index: 1;
+        border-radius: 4px;
+      }
+      .dropdown-content a {
+        color: #333;
+        padding: 10px 15px;
+        text-decoration: none;
+        display: block;
+      }
+      .dropdown-content a:hover {
+        background-color: #f1f1f1;
+      }
+      #currentDate {
+        font-size: 0.9em;
+        margin-right: 20px;
+      }
+      .container {
+        max-width: 960px;
+        margin: 100px auto 20px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+      }
+      h2 {
+        text-align: center;
+      }
+      .plot {
+        margin-bottom: 40px;
+        text-align: center;
+      }
+      img {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        background: #fff;
+      }
+      .controls {
+        text-align: center;
+        margin-top: 20px;
+      }
+      a.btn {
+        display: inline-block;
+        margin: 10px;
+        padding: 10px 20px;
+        text-decoration: none;
+        background: #5477f5;
+        color: #fff;
+        border-radius: 4px;
+      }
+      a.btn:hover {
+        background: #3c5ec7;
+      }
+    </style>
+</head>
+<body>
+  <header>
+    <div class="nav-container">
+      <div class="logo">
+        <h1>Healthcare Dashboard</h1>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+          <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn">{{ username }}</a>
+            <div class="dropdown-content">
+              <a href="{{ url_for('dashboard.profile') }}">Profile</a>
+              <a href="{{ url_for('auth.logout') }}">Logout</a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+      <div id="currentDate"></div>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2>Welcome, {{ username }}!</h2>
+    
+    <div class="plot">
+      <h3>Age vs. Cholesterol (Scatter Plot)</h3>
+      <img src="data:image/png;base64,{{ scatter_img }}" alt="Scatter Plot: Age vs. Cholesterol">
+    </div>
+    
+    <div class="plot">
+      <h3>Heart Disease Count (Bar Chart)</h3>
+      <img src="data:image/png;base64,{{ bar_img }}" alt="Bar Chart: Heart Disease Count">
+    </div>
+    
+    <div class="plot">
+      <h3>Age vs. BMI (Line Plot)</h3>
+      <img src="data:image/png;base64,{{ line_img }}" alt="Line Plot: Age vs. BMI">
+    </div>
+    
+    <div class="controls">
+      <a class="btn" href="{{ url_for('dashboard.download_report') }}">Download Report</a>
+    </div>
+  </div>
+
+  <script>
+    // Display current date in the top-right corner
+    const currentDateElem = document.getElementById("currentDate");
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+    const today = new Date();
+    currentDateElem.textContent = today.toLocaleDateString(undefined, options);
+  </script>
+</body>
+</html>
