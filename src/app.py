@@ -1,4 +1,3 @@
-# app.py
 import streamlit as st
 from database import init_db, save_user, check_credentials
 from healthcare_data import load_healthcare_data
@@ -18,31 +17,43 @@ def main():
     # --- Login / Sign Up Section ---
     if not st.session_state.logged_in:
         st.title("Welcome to the Healthcare Dashboard")
-        auth_choice = st.radio("Select Option", ["Login", "Sign Up"])
+        st.markdown("Please login or sign up to continue")
+        auth_choice = st.radio("Select Option", ["Login", "Sign Up"], index=0, key="auth_choice")
+
         if auth_choice == "Login":
-            st.header("Login")
-            username = st.text_input("Username")
-            password = st.text_input("Password", type="password")
-            if st.button("Login"):
-                if check_credentials(username, password):
-                    st.session_state.logged_in = True
-                    st.session_state.username = username
-                    st.success("Logged in successfully!")
-                    st.rerun()  # Use st.rerun() instead of st.experimental_rerun()
-                else:
-                    st.error("Invalid username or password!")
+            st.subheader("Login to Your Account")
+            # Center the login form using columns
+            cols = st.columns([1, 2, 1])
+            with cols[1]:
+                with st.form(key="login_form"):
+                    username = st.text_input("Username")
+                    password = st.text_input("Password", type="password")
+                    submit_login = st.form_submit_button("Login")
+                if submit_login:
+                    if check_credentials(username, password):
+                        st.session_state.logged_in = True
+                        st.session_state.username = username
+                        st.success("Logged in successfully!")
+                        st.rerun()  # Rerun the app to load the dashboard
+                    else:
+                        st.error("Invalid username or password!")
         else:
-            st.header("Sign Up")
-            new_username = st.text_input("Choose a Username", key="signup_username")
-            new_password = st.text_input("Choose a Password", type="password", key="signup_password")
-            if st.button("Sign Up"):
-                if new_username == "" or new_password == "":
-                    st.error("Please enter a username and password!")
-                elif save_user(new_username, new_password):
-                    st.success("User created successfully! Please log in.")
-                    st.rerun()  # Use st.rerun() instead of st.experimental_rerun()
-                else:
-                    st.error("Username already exists!")
+            st.subheader("Create a New Account")
+            # Center the sign-up form using columns
+            cols = st.columns([1, 2, 1])
+            with cols[1]:
+                with st.form(key="signup_form"):
+                    new_username = st.text_input("Choose a Username")
+                    new_password = st.text_input("Choose a Password", type="password")
+                    submit_signup = st.form_submit_button("Sign Up")
+                if submit_signup:
+                    if new_username == "" or new_password == "":
+                        st.error("Please enter a username and password!")
+                    elif save_user(new_username, new_password):
+                        st.success("User created successfully! Please log in.")
+                        st.rerun()
+                    else:
+                        st.error("Username already exists!")
         return  # Stop here if not logged in
 
     # --- Main Dashboard Section (after login) ---
@@ -51,7 +62,7 @@ def main():
     if st.sidebar.button("Logout"):
         st.session_state.logged_in = False
         st.session_state.username = ""
-        st.rerun()  # Use st.rerun() instead of st.experimental_rerun()
+        st.rerun()
 
     st.title("Healthcare Dashboard")
     st.markdown(f"**Welcome, {st.session_state.username}!**")
