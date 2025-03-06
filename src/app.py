@@ -96,6 +96,16 @@ def main():
                 st.pyplot(plot_boxplot(df_uploaded))
             st.pyplot(plot_line(df_uploaded))
             st.pyplot(plot_heatmap(df_uploaded))
+            
+            # Additional Download Report Feature
+            st.write("### Download Report for Uploaded Data")
+            pdf_uploaded_buffer = generate_pdf_report(df_uploaded)
+            st.download_button(
+                label="Download PDF Report for Uploaded Data",
+                data=pdf_uploaded_buffer,
+                file_name="uploaded_data_report.pdf",
+                mime="application/pdf"
+            )
     elif page == "Profile":
         st.header("Profile")
         st.markdown("### Account Details")
