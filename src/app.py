@@ -6,7 +6,10 @@ import pandas as pd
 import io
 
 def main():
-    st.set_page_config(page_title="Datavista", layout="wide")
+    st.set_page_config(
+    page_title="Datavista",
+    page_icon=":chart_with_upwards_trend:",
+    layout="wide")
     init_db()
 
     if "logged_in" not in st.session_state:
