@@ -1,8 +1,8 @@
+import io
+from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-from io import BytesIO
-from fpdf import FPDF
 
 def plot_scatter(df):
     num_cols = df.select_dtypes(include=["number"]).columns.tolist()
@@ -61,21 +61,28 @@ def plot_heatmap(df):
     return fig
 
 def generate_pdf_report(df):
-    pdf = FPDF()
-    pdf.set_auto_page_break(auto=True, margin=15)
-    pdf.add_page()
-    pdf.set_font("Arial", size=12)
-    pdf.cell(200, 10, txt="Healthcare Report", ln=True, align='C')
-    pdf.ln(10)
-    pdf.cell(200, 10, txt="Dataset Summary:", ln=True, align='L')
-    pdf.ln(5)
-    summary = df.describe().to_string()
-    for line in summary.split("\n"):
-        pdf.cell(200, 10, txt=line, ln=True, align='L')
-    buffer = BytesIO()
-    buffer.write(pdf.output(dest='S').encode('latin1'))
-    buffer.seek(0)
-    return buffer
+    """Generates a multi-page PDF report containing multiple visualizations."""
+    pdf_buffer = io.BytesIO()
+    # List of plotting functions to include in the PDF report
+    plot_functions = [
+        plot_scatter, 
+        plot_bar, 
+        plot_line, 
+        plot_histogram, 
+        plot_boxplot, 
+        plot_heatmap
+    ]
+    with PdfPages(pdf_buffer) as pdf:
+        for plot_func in plot_functions:
+            try:
+                fig = plot_func(df)
+                pdf.savefig(fig)
+                plt.close(fig)
+            except Exception as e:
+                print(f"Skipping {plot_func.__name__} due to error: {e}")
+                continue
+    pdf_buffer.seek(0)
+    return pdf_buffer
 
 def generate_best_viz(df):
     num_cols = df.select_dtypes(include=["number"]).columns.tolist()
