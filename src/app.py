@@ -1,7 +1,7 @@
 import streamlit as st
 from database import init_db, save_user, check_credentials
 from healthcare_data import load_healthcare_data
-from visualization import plot_scatter, plot_bar, plot_line, generate_pdf_report, generate_best_viz
+from visualization import plot_scatter, plot_bar, plot_line, plot_histogram, plot_boxplot, plot_heatmap, generate_pdf_report, generate_best_viz
 import pandas as pd
 import io
 
@@ -72,9 +72,12 @@ def main():
         col1, col2 = st.columns(2)
         with col1:
             st.pyplot(plot_scatter(df))
+            st.pyplot(plot_histogram(df))
         with col2:
             st.pyplot(plot_bar(df))
+            st.pyplot(plot_boxplot(df))
         st.pyplot(plot_line(df))
+        st.pyplot(plot_heatmap(df))
     elif page == "Upload Dataset":
         st.header("Upload Your Dataset")
         uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
@@ -83,9 +86,16 @@ def main():
             st.write("### Preview of Uploaded Data")
             st.write(df_uploaded.head())
             
-            st.write("### Best Suggested Visualization")
-            best_viz = generate_best_viz(df_uploaded)  # Call LLM function
-            st.pyplot(best_viz)
+            st.write("### Suggested Visualizations")
+            col1, col2 = st.columns(2)
+            with col1:
+                st.pyplot(plot_scatter(df_uploaded))
+                st.pyplot(plot_histogram(df_uploaded))
+            with col2:
+                st.pyplot(plot_bar(df_uploaded))
+                st.pyplot(plot_boxplot(df_uploaded))
+            st.pyplot(plot_line(df_uploaded))
+            st.pyplot(plot_heatmap(df_uploaded))
     elif page == "Profile":
         st.header("Profile")
         st.markdown("### Account Details")
