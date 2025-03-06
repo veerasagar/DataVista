@@ -1,28 +1,26 @@
 import streamlit as st
 from database import init_db, save_user, check_credentials
 from healthcare_data import load_healthcare_data
-from visualization import plot_scatter, plot_bar, plot_line, generate_pdf_report
+from visualization import plot_scatter, plot_bar, plot_line, generate_pdf_report, generate_best_viz
 import pandas as pd
+import io
 
 def main():
     st.set_page_config(page_title="Datavista", layout="wide")
-    init_db()  # Ensure the database is initialized
+    init_db()
 
-    # Initialize session state for authentication
     if "logged_in" not in st.session_state:
         st.session_state.logged_in = False
     if "username" not in st.session_state:
         st.session_state.username = ""
 
-    # --- Login / Sign Up Section ---
     if not st.session_state.logged_in:
-        st.title("Welcome to the Datavista!!!")
+        st.title("Welcome to Datavista!")
         st.markdown("Please login or sign up to continue")
-        auth_choice = st.radio("Select Option", ["Login", "Sign Up"], index=0, key="auth_choice")
+        auth_choice = st.radio("Select Option", ["Login", "Sign Up"], index=0)
 
         if auth_choice == "Login":
             st.subheader("Login to Your Account")
-            # Center the login form using columns
             cols = st.columns([1, 2, 1])
             with cols[1]:
                 with st.form(key="login_form"):
@@ -34,12 +32,11 @@ def main():
                         st.session_state.logged_in = True
                         st.session_state.username = username
                         st.success("Logged in successfully!")
-                        st.rerun()  # Rerun the app to load the dashboard
+                        st.rerun()
                     else:
                         st.error("Invalid username or password!")
         else:
             st.subheader("Create a New Account")
-            # Center the sign-up form using columns
             cols = st.columns([1, 2, 1])
             with cols[1]:
                 with st.form(key="signup_form"):
@@ -54,11 +51,10 @@ def main():
                         st.rerun()
                     else:
                         st.error("Username already exists!")
-        return  # Stop here if not logged in
+        return
 
-    # --- Main Dashboard Section (after login) ---
-    st.sidebar.title("Datavista!")
-    page = st.sidebar.radio("Go to", ["Dashboard", "Profile", "Download Report"])
+    st.sidebar.title("Datavista")
+    page = st.sidebar.radio("Go to", ["Dashboard", "Upload Dataset", "Profile", "Download Report"])
     if st.sidebar.button("Logout"):
         st.session_state.logged_in = False
         st.session_state.username = ""
@@ -68,7 +64,6 @@ def main():
     st.markdown(f"**Welcome, {st.session_state.username}!**")
     st.markdown(f"*Today is {pd.to_datetime('today').strftime('%a, %b %d, %Y')}*")
 
-    # Load healthcare data
     df = load_healthcare_data()
 
     if page == "Dashboard":
@@ -80,22 +75,25 @@ def main():
         with col2:
             st.pyplot(plot_bar(df))
         st.pyplot(plot_line(df))
+    elif page == "Upload Dataset":
+        st.header("Upload Your Dataset")
+        uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
+        if uploaded_file is not None:
+            df_uploaded = pd.read_csv(uploaded_file)
+            st.write("### Preview of Uploaded Data")
+            st.write(df_uploaded.head())
+            
+            st.write("### Best Suggested Visualization")
+            best_viz = generate_best_viz(df_uploaded)  # Call LLM function
+            st.pyplot(best_viz)
     elif page == "Profile":
         st.header("Profile")
         st.markdown("### Account Details")
         st.write(f"**Username:** {st.session_state.username}")
         st.write("**Email:** user@example.com")
         st.write("**Member Since:** January 1, 2022")
-        st.markdown("### Activity Summary")
-        st.write("You have logged in 5 times.")
-        st.write("Last login: Today")
-        st.markdown("### Reports")
-        st.write("You have generated 3 reports.")
-        if st.button("Edit Profile"):
-            st.info("Profile edit functionality coming soon!")
     elif page == "Download Report":
         st.header("Download Report")
-        st.markdown("Click the button below to download your healthcare report as a PDF.")
         pdf_buffer = generate_pdf_report(df)
         st.download_button(
             label="Download PDF Report",
