@@ -92,7 +92,7 @@ def main():
 
     # Apply background image only for login/sign-up page
     if not st.session_state.logged_in:
-        add_bg_from_local("background.jpg")
+        add_bg_from_local("../static/background.jpg")
         st.markdown("<div style='text-align: center;'><h1>Welcome to Datavista!</h1></div>", unsafe_allow_html=True)
         auth_choice = st.radio(
             "Select Option", ["Login", "Sign Up"], index=0, horizontal=True, label_visibility="hidden"
