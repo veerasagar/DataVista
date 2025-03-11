@@ -1,5 +1,5 @@
 import streamlit as st
-from database import init_db, save_user, check_credentials, get_user_email, get_member_since
+from database import init_db, save_user, check_credentials, get_user_email, get_member_since, change_password
 from healthcare_data import load_healthcare_data
 from visualization import plot_scatter, plot_bar, plot_line, plot_histogram, plot_boxplot, plot_heatmap, generate_pdf_report, generate_best_viz
 import pandas as pd
@@ -119,6 +119,33 @@ def main():
         st.write(f"**Email:** {user_email}")
         member_since = get_member_since(st.session_state.username)
         st.write(f"**Member Since:** {member_since}")
+
+        st.markdown("### Change Password")
+
+    # Create a two-column layout and place the form in the left column.
+        col_left, col_right = st.columns([1, 1])
+        with col_left:
+        # The container div takes 100% of the column width.
+            st.markdown(
+                """
+                <div style="width: 100%; padding: 1rem; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 1rem;">
+                """, unsafe_allow_html=True
+            )
+            with st.form(key="change_password_form"):
+                current_password = st.text_input("Current Password", type="password")
+                new_password = st.text_input("New Password", type="password")
+                confirm_password = st.text_input("Confirm New Password", type="password")
+                submit_change = st.form_submit_button("Change Password")
+            st.markdown("</div>", unsafe_allow_html=True)
+
+        if submit_change:
+            if new_password != confirm_password:
+                st.error("New password and confirmation do not match!")
+            elif change_password(st.session_state.username, current_password, new_password):
+                st.success("Password changed successfully!")
+            else:
+                st.error("Current password is incorrect!")
+
     elif page == "Download Report":
         st.header("Download Report")
         pdf_buffer = generate_pdf_report(df)

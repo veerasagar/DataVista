@@ -75,3 +75,21 @@ def get_member_since(username):
     if result:
         return result[0]
     return None
+
+def change_password(username, current_password, new_password):
+    """Changes the password for a user if the current password is correct.
+    
+    Returns True if the password was successfully updated, or False otherwise.
+    """
+    # Check that the current password matches the one in the database.
+    if not check_credentials(username, current_password):
+        return False
+    try:
+        conn = sqlite3.connect(DATABASE)
+        c = conn.cursor()
+        c.execute("UPDATE users SET password=? WHERE username=?", (new_password, username))
+        conn.commit()
+        conn.close()
+        return True
+    except sqlite3.Error:
+        return False
