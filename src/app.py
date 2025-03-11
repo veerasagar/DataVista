@@ -11,11 +11,12 @@ def main():
         page_icon=":chart_with_upwards_trend:",
         layout="wide"
     )
-    
-    # Add custom CSS to elevate the sidebar
+
+    # Existing CSS for the sidebar and new CSS to beautify the login/sign-up pages
     st.markdown(
         """
         <style>
+        /* Sidebar styling (existing) */
         [data-testid="stSidebar"] {
             background: linear-gradient(135deg, #71b7e6, #9b59b6);
             color: white;
@@ -32,10 +33,43 @@ def main():
         [data-testid="stSidebar"] p {
             color: black;
         }
+        /* Custom CSS for Login and Sign Up pages */
+        h1, h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+        /* Center radio buttons and display them horizontally */
+        .stRadio > div {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        /* Style form containers */
+        [data-testid="stForm"] {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        /* Style text inputs */
+        .stTextInput>div>input {
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+        }
+        /* Style buttons */
+        .stButton button {
+            background-color: #9b59b6;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            color: white;
+        }
         </style>
         """, unsafe_allow_html=True
     )
-    
+
     init_db()
 
     if "logged_in" not in st.session_state:
@@ -45,8 +79,9 @@ def main():
 
     if not st.session_state.logged_in:
         st.title("Welcome to Datavista!")
-        st.markdown("Please login or sign up to continue")
-        auth_choice = st.radio("Select Option", ["Login", "Sign Up"], index=0)
+        auth_choice = st.radio(
+            "Select Option", ["Login", "Sign Up"], index=0, horizontal=True, label_visibility="hidden"
+        )
 
         if auth_choice == "Login":
             st.subheader("Login to Your Account")
@@ -117,7 +152,7 @@ def main():
             df_uploaded = pd.read_csv(uploaded_file)
             st.write("### Preview of Uploaded Data")
             st.write(df_uploaded.head())
-            
+
             st.write("### Suggested Visualizations")
             col1, col2 = st.columns(2)
             with col1:
@@ -128,7 +163,7 @@ def main():
                 st.pyplot(plot_boxplot(df_uploaded))
             st.pyplot(plot_line(df_uploaded))
             st.pyplot(plot_heatmap(df_uploaded))
-            
+
             # Additional Download Report Feature
             st.write("### Download Report for Uploaded Data")
             pdf_uploaded_buffer = generate_pdf_report(df_uploaded)
@@ -148,7 +183,6 @@ def main():
         st.write(f"**Member Since:** {member_since}")
 
         st.markdown("### Change Password")
-
         col_left, col_right = st.columns([1, 1])
         with col_left:
             st.markdown(
@@ -162,7 +196,6 @@ def main():
                 confirm_password = st.text_input("Confirm New Password", type="password")
                 submit_change = st.form_submit_button("Change Password")
             st.markdown("</div>", unsafe_allow_html=True)
-
         if submit_change:
             if new_password != confirm_password:
                 st.error("New password and confirmation do not match!")
@@ -170,7 +203,6 @@ def main():
                 st.success("Password changed successfully!")
             else:
                 st.error("Current password is incorrect!")
-
     elif page == "Download Report":
         st.header("Download Report")
         pdf_buffer = generate_pdf_report(df)
