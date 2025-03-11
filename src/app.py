@@ -1,9 +1,29 @@
 import streamlit as st
+import base64
+import pandas as pd
 from database import init_db, save_user, check_credentials, get_user_email, get_member_since, change_password
 from healthcare_data import load_healthcare_data
 from visualization import plot_scatter, plot_bar, plot_line, plot_histogram, plot_boxplot, plot_heatmap, generate_pdf_report, generate_best_viz
-import pandas as pd
-import io
+
+def add_bg_from_local(image_file):
+    """
+    Reads a local image file, encodes it in base64,
+    and injects CSS to set it as the background.
+    """
+    with open(image_file, "rb") as image:
+        encoded = base64.b64encode(image.read()).decode()
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/png;base64,{encoded}");
+            background-size: cover;
+            background-position: center;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
 def main():
     st.set_page_config(
@@ -12,11 +32,11 @@ def main():
         layout="wide"
     )
 
-    # Existing CSS for the sidebar and new CSS to beautify the login/sign-up pages
+    # Custom CSS for sidebar and login/sign-up pages
     st.markdown(
         """
         <style>
-        /* Sidebar styling (existing) */
+        /* Sidebar styling */
         [data-testid="stSidebar"] {
             background: linear-gradient(135deg, #71b7e6, #9b59b6);
             color: white;
@@ -35,31 +55,24 @@ def main():
         }
         /* Custom CSS for Login and Sign Up pages */
         h1, h2, h3 {
-            text-align: center;
             color: #333;
         }
-        /* Center radio buttons and display them horizontally */
         .stRadio > div {
             display: flex;
             justify-content: center;
             margin-bottom: 1.5rem;
         }
-        /* Style form containers */
         [data-testid="stForm"] {
-            background: #f9f9f9;
             padding: 1.5rem;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        /* Style text inputs */
         .stTextInput>div>input {
             border-radius: 5px;
             border: 1px solid #ddd;
             padding: 0.5rem;
         }
-        /* Style buttons */
         .stButton button {
-            background-color: #9b59b6;
             border: none;
             border-radius: 5px;
             padding: 0.5rem 1rem;
@@ -77,14 +90,16 @@ def main():
     if "username" not in st.session_state:
         st.session_state.username = ""
 
+    # Apply background image only for login/sign-up page
     if not st.session_state.logged_in:
-        st.title("Welcome to Datavista!")
+        #add_bg_from_local("background.png")
+        st.markdown("<div style='text-align: center;'><h1>Welcome to Datavista!</h1></div>", unsafe_allow_html=True)
         auth_choice = st.radio(
             "Select Option", ["Login", "Sign Up"], index=0, horizontal=True, label_visibility="hidden"
         )
 
         if auth_choice == "Login":
-            st.subheader("Login to Your Account")
+            st.markdown("<div style='text-align: center;'><h3>Login to Your Account</h3></div>", unsafe_allow_html=True)
             cols = st.columns([1, 2, 1])
             with cols[1]:
                 with st.form(key="login_form"):
@@ -100,7 +115,7 @@ def main():
                     else:
                         st.error("Invalid username or password!")
         else:
-            st.subheader("Create a New Account")
+            st.markdown("<div style='text-align: center;'><h3>Create a New Account</h3></div>", unsafe_allow_html=True)
             cols = st.columns([1, 2, 1])
             with cols[1]:
                 with st.form(key="signup_form"):
@@ -120,6 +135,7 @@ def main():
                         st.error("Username already exists!")
         return
 
+    # Main app (post login)
     st.sidebar.title("Datavista")
     page = st.sidebar.radio("Go to", ["Dashboard", "Upload Dataset", "Profile", "Download Report"])
     if st.sidebar.button("Logout"):
@@ -164,7 +180,6 @@ def main():
             st.pyplot(plot_line(df_uploaded))
             st.pyplot(plot_heatmap(df_uploaded))
 
-            # Additional Download Report Feature
             st.write("### Download Report for Uploaded Data")
             pdf_uploaded_buffer = generate_pdf_report(df_uploaded)
             st.download_button(
@@ -185,17 +200,11 @@ def main():
         st.markdown("### Change Password")
         col_left, col_right = st.columns([1, 1])
         with col_left:
-            st.markdown(
-                """
-                <div style="width: 100%; padding: 0rem; border: 0px solid #ddd; border-radius: 0px; margin-bottom: 0rem;">
-                """, unsafe_allow_html=True
-            )
             with st.form(key="change_password_form"):
                 current_password = st.text_input("Current Password", type="password")
                 new_password = st.text_input("New Password", type="password")
                 confirm_password = st.text_input("Confirm New Password", type="password")
                 submit_change = st.form_submit_button("Change Password")
-            st.markdown("</div>", unsafe_allow_html=True)
         if submit_change:
             if new_password != confirm_password:
                 st.error("New password and confirmation do not match!")
