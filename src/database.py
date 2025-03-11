@@ -1,5 +1,5 @@
 import sqlite3
-import os
+from datetime import datetime
 
 DATABASE = "users.db"
 
@@ -12,28 +12,33 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE,
             password TEXT,
-            email TEXT
+            email TEXT,
+            member_since TEXT
         )
     ''')
     
-    # Check if the email column exists; if not, add it.
+    # Check and add columns if missing (for existing databases)
     c.execute("PRAGMA table_info(users)")
     columns = [info[1] for info in c.fetchall()]
     if "email" not in columns:
         c.execute("ALTER TABLE users ADD COLUMN email TEXT")
+    if "member_since" not in columns:
+        c.execute("ALTER TABLE users ADD COLUMN member_since TEXT")
     
     conn.commit()
     conn.close()
 
 def save_user(username, password, email):
-    """Saves a new user to the database.
+    """Saves a new user to the database with the current date as sign-up date.
     
     Returns True if successful, or False if the username already exists.
     """
+    member_since = datetime.now().strftime("%Y-%m-%d")
     try:
         conn = sqlite3.connect(DATABASE)
         c = conn.cursor()
-        c.execute("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", (username, password, email))
+        c.execute("INSERT INTO users (username, password, email, member_since) VALUES (?, ?, ?, ?)",
+                  (username, password, email, member_since))
         conn.commit()
         conn.close()
         return True
@@ -54,6 +59,17 @@ def get_user_email(username):
     conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
     c.execute("SELECT email FROM users WHERE username=?", (username,))
+    result = c.fetchone()
+    conn.close()
+    if result:
+        return result[0]
+    return None
+
+def get_member_since(username):
+    """Retrieves the sign-up date for the given username."""
+    conn = sqlite3.connect(DATABASE)
+    c = conn.cursor()
+    c.execute("SELECT member_since FROM users WHERE username=?", (username,))
     result = c.fetchone()
     conn.close()
     if result:

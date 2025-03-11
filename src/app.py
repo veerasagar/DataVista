@@ -1,5 +1,5 @@
 import streamlit as st
-from database import init_db, save_user, check_credentials, get_user_email
+from database import init_db, save_user, check_credentials, get_user_email, get_member_since
 from healthcare_data import load_healthcare_data
 from visualization import plot_scatter, plot_bar, plot_line, plot_histogram, plot_boxplot, plot_heatmap, generate_pdf_report, generate_best_viz
 import pandas as pd
@@ -117,7 +117,8 @@ def main():
         st.write(f"**Username:** {st.session_state.username}")
         user_email = get_user_email(st.session_state.username)
         st.write(f"**Email:** {user_email}")
-        st.write("**Member Since:** January 1, 2022")
+        member_since = get_member_since(st.session_state.username)
+        st.write(f"**Member Since:** {member_since}")
     elif page == "Download Report":
         st.header("Download Report")
         pdf_buffer = generate_pdf_report(df)
