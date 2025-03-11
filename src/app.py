@@ -122,13 +122,13 @@ def main():
 
         st.markdown("### Change Password")
 
-    # Create a two-column layout and place the form in the left column.
+        # Create a two-column layout and place the form in the left column.
         col_left, col_right = st.columns([1, 1])
         with col_left:
-        # The container div takes 100% of the column width.
+            # The container div takes 100% of the column width.
             st.markdown(
                 """
-                <div style="width: 100%; padding: 1rem; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 1rem;">
+                <div style="width: 100%; padding: 0rem; border: 0px solid #ddd; border-radius: 0px; margin-bottom: 0rem;">
                 """, unsafe_allow_html=True
             )
             with st.form(key="change_password_form"):
