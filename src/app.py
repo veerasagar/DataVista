@@ -11,6 +11,31 @@ def main():
         page_icon=":chart_with_upwards_trend:",
         layout="wide"
     )
+    
+    # Add custom CSS to elevate the sidebar
+    st.markdown(
+        """
+        <style>
+        [data-testid="stSidebar"] {
+            background: linear-gradient(135deg, #71b7e6, #9b59b6);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        [data-testid="stSidebar"] .sidebar-content {
+            padding: 20px;
+        }
+        [data-testid="stSidebar"] h1, 
+        [data-testid="stSidebar"] h2, 
+        [data-testid="stSidebar"] h3,
+        [data-testid="stSidebar"] p {
+            color: black;
+        }
+        </style>
+        """, unsafe_allow_html=True
+    )
+    
     init_db()
 
     if "logged_in" not in st.session_state:
@@ -124,10 +149,8 @@ def main():
 
         st.markdown("### Change Password")
 
-        # Create a two-column layout and place the form in the left column.
         col_left, col_right = st.columns([1, 1])
         with col_left:
-            # The container div takes 100% of the column width.
             st.markdown(
                 """
                 <div style="width: 100%; padding: 0rem; border: 0px solid #ddd; border-radius: 0px; margin-bottom: 0rem;">
