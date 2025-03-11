@@ -1,5 +1,5 @@
 import streamlit as st
-from database import init_db, save_user, check_credentials
+from database import init_db, save_user, check_credentials, get_user_email
 from healthcare_data import load_healthcare_data
 from visualization import plot_scatter, plot_bar, plot_line, plot_histogram, plot_boxplot, plot_heatmap, generate_pdf_report, generate_best_viz
 import pandas as pd
@@ -7,9 +7,10 @@ import io
 
 def main():
     st.set_page_config(
-    page_title="Datavista",
-    page_icon=":chart_with_upwards_trend:",
-    layout="wide")
+        page_title="Datavista",
+        page_icon=":chart_with_upwards_trend:",
+        layout="wide"
+    )
     init_db()
 
     if "logged_in" not in st.session_state:
@@ -44,12 +45,13 @@ def main():
             with cols[1]:
                 with st.form(key="signup_form"):
                     new_username = st.text_input("Choose a Username")
+                    new_email = st.text_input("Enter your Email")
                     new_password = st.text_input("Choose a Password", type="password")
                     submit_signup = st.form_submit_button("Sign Up")
                 if submit_signup:
-                    if new_username == "" or new_password == "":
-                        st.error("Please enter a username and password!")
-                    elif save_user(new_username, new_password):
+                    if new_username == "" or new_password == "" or new_email == "":
+                        st.error("Please enter a username, email, and password!")
+                    elif save_user(new_username, new_password, new_email):
                         st.success("User created successfully! Please log in.")
                         st.rerun()
                     else:
@@ -113,7 +115,8 @@ def main():
         st.header("Profile")
         st.markdown("### Account Details")
         st.write(f"**Username:** {st.session_state.username}")
-        st.write("**Email:** user@example.com")
+        user_email = get_user_email(st.session_state.username)
+        st.write(f"**Email:** {user_email}")
         st.write("**Member Since:** January 1, 2022")
     elif page == "Download Report":
         st.header("Download Report")
