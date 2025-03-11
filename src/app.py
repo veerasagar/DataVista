@@ -52,7 +52,9 @@ def main():
                     if new_username == "" or new_password == "" or new_email == "":
                         st.error("Please enter a username, email, and password!")
                     elif save_user(new_username, new_password, new_email):
-                        st.success("User created successfully! Please log in.")
+                        st.session_state.logged_in = True
+                        st.session_state.username = new_username
+                        st.success("User created successfully and logged in!")
                         st.rerun()
                     else:
                         st.error("Username already exists!")
